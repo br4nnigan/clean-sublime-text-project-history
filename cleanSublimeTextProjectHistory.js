@@ -31,17 +31,17 @@ fs.readFile(filepath, "binary", function(err, file) {
 
 		if ( lengthAfter != lengthBefore ){
 
-			console.log("Removed", lengthBefore-lengthAfter, " entries.");
-
 			file = JSON.stringify(sublime_session);
 
 			fs.writeFile(filepath, file, function (err) {
-				if (err) if (err) throw err;
-				console.log("writeFile callback");
+				if (err)
+					throw err;
+				else
+					console.log("Removed", lengthBefore-lengthAfter, " entries.");
 			});
+		}else{
+			console.log("Nothing to remove.");
 		}
-
-		console.log("Cleaned up.");
 
 	}
 
