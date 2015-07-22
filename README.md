@@ -5,4 +5,4 @@ filepath has to be changed in order to work on windows though
 
 exit the program before running the script!
 
-if you're not familiar with node: you'll need to install [nodejs](https://nodejs.org/). install dependancies by running "npm install" from the command prompt in the project folder. then type "node cleanSublimeTextProjectHistory.js".
+if you're not familiar with node: you'll need to install [nodejs](https://nodejs.org/). install dependancies by running "npm install" from the command prompt in the folder containing these files. then type "node cleanSublimeTextProjectHistory.js".
