@@ -1,6 +1,7 @@
 var osenv = require('osenv')
 var home = osenv.home();
 var fs = require("fs");
+var strip = require('strip-comments');
 var session_file_path = home+"/Library/Application Support/Sublime Text 3/Local/Session.sublime_session";
 
 
@@ -34,7 +35,7 @@ fs.readFile(session_file_path, "binary", function(err, session_file) {
 
 				if ( workspace_file ){
 
-					workspace_file    = workspace_file.replace( /\t/g,  '', "g"); // escape tabs
+					workspace_file    = strip(workspace_file.replace( /\t/g,  '', "g")); // escape tabs
 					workspace         = JSON.parse(workspace_file);
 					project_file_path = workspace_file_path.substr(0, workspace_file_path.lastIndexOf("/")) + "/" + workspace.project;
 
