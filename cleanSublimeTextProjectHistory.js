@@ -1,6 +1,7 @@
 var osenv = require('osenv')
 var home = osenv.home();
 var fs = require("fs");
+var strip = require('strip-comments');
 var session_file_path = home+"/Library/Application Support/Sublime Text 3/Local/Session.sublime_session";
 
 
@@ -38,6 +39,7 @@ console.log('Checking select_project.selected_items...');
 
 
 		function checkProjectInWorkspace (file_path) {
+
 
 			var
 			workspace,

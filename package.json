@@ -4,7 +4,8 @@
   "description": "deletes references to non existing project files from the sublime_session file",
   "main": "cleanSublimeTextProjectHistory.js",
   "dependencies": {
-    "osenv": "^0.1.3"
+    "osenv": "^0.1.3",
+    "strip-comments": "^0.4.3"
   },
   "devDependencies": {},
   "scripts": {
