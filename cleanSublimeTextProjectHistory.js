@@ -15,46 +15,66 @@ fs.readFile(session_file_path, "binary", function(err, session_file) {
 
 		var
 		sublime_session = JSON.parse(session_file),
-		lengthBefore    = sublime_session.workspaces.recent_workspaces.length,
-		lengthAfter;
+		cleaned = 0;
+
+console.log('Checking workspaces.recent_workspaces...');
+		sublime_session.workspaces.recent_workspaces = sublime_session.workspaces.recent_workspaces.filter( checkFilePath);
+
+console.log('Checking projects in workspaces.recent_workspaces...');
+		sublime_session.workspaces.recent_workspaces = sublime_session.workspaces.recent_workspaces.filter( checkProjectInWorkspace );
+
+console.log('Checking new_window_settings.file_history...');
+		sublime_session.settings.new_window_settings.file_history = sublime_session.settings.new_window_settings.file_history.filter( checkFilePath );
+
+console.log('Checking select_project.selected_items...');
+		for (var i = 0, wind; i < sublime_session.windows.length; i++) {
+			wind = sublime_session.windows[i];
+			wind.select_project.selected_items = wind.select_project.selected_items.filter( function(e,s) {
+				s = e.split(","); // an item is "searchterm,projectpath"
+				e = s.length > 1 ? s[1] : e;
+				return checkFilePath(e);
+			} );
+		}
 
 
+		function checkProjectInWorkspace (file_path) {
 
-		sublime_session.workspaces.recent_workspaces = sublime_session.workspaces.recent_workspaces.filter(function (workspace_file_path) {
+			var
+			workspace,
+			project_file_path,
+			workspace_file = fs.readFileSync(file_path, {encoding: "utf8"});
 
-			if ( !fs.existsSync(workspace_file_path) ){
-				console.log('Workspace does not exist:', workspace_file_path);
+			if ( workspace_file ){
+
+				workspace_file    = workspace_file.replace( /\t/g,  '', "g"); // escape tabs
+				workspace         = JSON.parse(workspace_file);
+				project_file_path = file_path.substr(0, file_path.lastIndexOf("/")) + "/" + workspace.project;
+
+				if ( workspace.project && !fs.existsSync(project_file_path) ){
+					console.log("    Removing '" + project_file_path + "'");
+
+				}else{
+					// console.log('Project DOES exist:', project_file_path);
+					return true;
+				}
+			}
+			cleaned++;
+			return false;
+		}
+
+		function checkFilePath(file_path) {
+
+			if ( !fs.existsSync(file_path) ){
+				console.log("    Removing '" + file_path + "'");
+				cleaned++;
 				return false;
 			}else {
-
-				var
-				workspace,
-				project_file_path,
-				workspace_file = fs.readFileSync(workspace_file_path, {encoding: "utf8"});
-
-				if ( workspace_file ){
-
-					workspace_file    = workspace_file.replace( /\t/g,  '', "g"); // escape tabs
-					workspace         = JSON.parse(workspace_file);
-					project_file_path = workspace_file_path.substr(0, workspace_file_path.lastIndexOf("/")) + "/" + workspace.project;
-
-					if ( workspace.project && !fs.existsSync(project_file_path) ){
-						console.log('Project does not exist:', project_file_path);
-						return false;
-					}else{
-						// console.log('Project DOES exist:', project_file_path);
-					}
-				}
-
 				return true;
 			}
-		});
+		}
 
 
-
-		lengthAfter = sublime_session.workspaces.recent_workspaces.length
-
-		if ( lengthAfter != lengthBefore ){
+		if ( cleaned > 0 ){
 
 			session_file = JSON.stringify(sublime_session);
 
@@ -62,7 +82,7 @@ fs.readFile(session_file_path, "binary", function(err, session_file) {
 				if (err)
 					throw err;
 				else
-					console.log("Removed", lengthBefore-lengthAfter, " entries.");
+					console.log("Removed " + cleaned + " entries.");
 			});
 		}else{
 			console.log("Nothing to remove.");
