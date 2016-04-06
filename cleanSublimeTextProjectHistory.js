@@ -48,7 +48,7 @@ console.log('Checking select_project.selected_items...');
 
 			if ( workspace_file ){
 
-				workspace_file    = workspace_file.replace( /\t/g,  '', "g"); // escape tabs
+				workspace_file    = strip(workspace_file.replace( /\t/g,  '', "g")); // escape tabs, strip comments
 				workspace         = JSON.parse(workspace_file);
 				project_file_path = file_path.substr(0, file_path.lastIndexOf("/")) + "/" + workspace.project;
 
