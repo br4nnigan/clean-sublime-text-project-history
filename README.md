@@ -5,4 +5,4 @@ tested in osx and win7. for other OS we still need the session_file_path so plea
 
 **exit SublimeText before running this script!**
 
-if you're not familiar with node: you'll need to install [nodejs](https://nodejs.org/). install dependancies by running "npm install" from the command prompt in the folder containing these files. then type "node cleanSublimeTextProjectHistory.js".
+if you're not familiar with node: you'll need to install [nodejs](https://nodejs.org/). install dependancies by running "npm install" from the command prompt in the folder containing these files. then type "node cleanSublimeTextProjectHistory.js". on Linux/OSX you can ommit the "node"
