@@ -9,6 +9,9 @@ switch ( process.platform ){
 	break;
 	case "darwin" :
 	session_file_path = process.env.HOME + "/Library/Application Support/Sublime Text 3/Local/Session.sublime_session";
+	case "linux" :
+	session_file_path = process.env.HOME + "/.config/sublime-text/Local/Session.sublime_session";
+	break;a
 }
 
 if ( session_file_path ) {
