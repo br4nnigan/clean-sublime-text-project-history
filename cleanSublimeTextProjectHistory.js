@@ -42,9 +42,7 @@ if ( session_file_path ) {
 			for (var i = 0, wind; i < sublime_session.windows.length; i++) {
 				wind = sublime_session.windows[i];
 				wind.select_project.selected_items = wind.select_project.selected_items.filter( function(e,s) {
-					s = e.split(","); // an item is "searchterm,projectpath"
-					e = s.length > 1 ? s[1] : e;
-					return checkFilePath(e);
+					return checkFilePath(e.pop());
 				} );
 			}
 
